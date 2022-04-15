@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/models/persona.dart';
+import 'package:sala_ensayo/pages/persona_crud.dart';
 import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 
 class PersonasPage extends StatefulWidget {
@@ -20,6 +21,11 @@ class _PersonasPageState extends State<PersonasPage> {
       ),
       drawer: const PanelLateralWidget(),
       body: _lista(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => print('hola'),
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -29,7 +35,7 @@ class _PersonasPageState extends State<PersonasPage> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(
-            child: Text('An error has occurred!'),
+            child: Text('No se puso conectar con el servidor'),
           );
         } else if (snapshot.hasData) {
           return PersonaLista(personas: snapshot.data!);
@@ -70,53 +76,6 @@ class PersonaLista extends StatelessWidget {
           subtitle: Text('Concat de bandas'),
         );
       },
-    );
-  }
-}
-
-class PersonaCRUD extends StatelessWidget {
-  const PersonaCRUD({Key? key, required this.persona}) : super(key: key);
-
-  final Persona persona;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(persona.nombre),
-      ),
-      body: const MyCustomForm(),
-    );
-  }
-}
-
-class MyCustomForm extends StatelessWidget {
-  const MyCustomForm({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter a search term',
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextFormField(
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Enter your username',
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -11,10 +11,10 @@ class Persona {
     required this.telefono,
   });
 
-  final int id;
-  final String nombre;
-  final String apellido;
-  final int telefono;
+  int id;
+  String nombre;
+  String apellido;
+  int telefono;
 
   factory Persona.fromJson(Map<String, dynamic> json) => Persona(
         id: json['id'],
