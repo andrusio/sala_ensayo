@@ -37,8 +37,18 @@ class FormPersona extends StatefulWidget {
 
 class FormPersonaState extends State<FormPersona> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController nombreController = TextEditingController();
+  final TextEditingController apellidoController = TextEditingController();
+  final TextEditingController telefonoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    nombreController.text = widget.persona.nombre ?? '';
+    apellidoController.text = widget.persona.apellido ?? '';
+    telefonoController.text = widget.persona.telefono != null
+        ? widget.persona.telefono.toString()
+        : '';
+
     return Form(
       key: _formKey,
       child: Padding(
@@ -51,7 +61,7 @@ class FormPersonaState extends State<FormPersona> {
                 border: UnderlineInputBorder(),
                 labelText: 'Nombre',
               ),
-              initialValue: widget.persona.nombre,
+              //initialValue: widget.persona.nombre,
               //onFieldSubmitted: //aca
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -59,19 +69,20 @@ class FormPersonaState extends State<FormPersona> {
                 }
                 return null;
               },
+              controller: nombreController,
             ),
             TextFormField(
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: 'Apellido',
               ),
-              initialValue: widget.persona.apellido,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'No puede estar vacio';
                 }
                 return null;
               },
+              controller: apellidoController,
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -79,32 +90,78 @@ class FormPersonaState extends State<FormPersona> {
                 labelText: 'Teléfono',
               ),
               keyboardType: TextInputType.number,
-              initialValue: widget.persona.telefono != null
-                  ? widget.persona.telefono.toString()
-                  : '',
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'No puede estar vacio';
                 }
                 return null;
               },
+              controller: telefonoController,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Validate returns true if the form is valid, or false otherwise.
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Procesando...')),
-                    );
-                  }
-                },
-                child: const Text('Guardar'),
-              ),
-            ),
+            botonera(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget botonera() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (widget.persona.id != null) ...[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.red),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  setState(() {
+                    dynamic respuesta = eliminarPersona(widget.persona.id!);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(respuesta.toString()),
+                    ));
+                  });
+                }
+              },
+              child: const Text('Eliminar'),
+            ),
+            const SizedBox(width: 25),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  setState(() {
+                    dynamic respuesta = modificarPersona(
+                        widget.persona.id!,
+                        nombreController.text,
+                        apellidoController.text,
+                        telefonoController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(respuesta.toString()),
+                    ));
+                  });
+                }
+              },
+              child: const Text('Editar'),
+            ),
+          ],
+          if (widget.persona.id == null) ...[
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  setState(() {
+                    dynamic respuesta = crearPersona(nombreController.text,
+                        apellidoController.text, telefonoController.text);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(respuesta.toString()),
+                    ));
+                  });
+                }
+              },
+              child: const Text('Guardar'),
+            ),
+          ],
+        ],
       ),
     );
   }
