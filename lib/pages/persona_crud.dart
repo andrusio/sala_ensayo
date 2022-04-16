@@ -14,9 +14,11 @@ class PersonaCRUD extends StatefulWidget {
 class _PersonaCRUDState extends State<PersonaCRUD> {
   @override
   Widget build(BuildContext context) {
+    String titulo =
+        widget.persona.id == null ? 'Agregar persona' : 'Editar persona';
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.persona.apellido + ', ' + widget.persona.nombre),
+        title: Text(titulo),
       ),
       body: FormPersona(persona: widget.persona),
     );
@@ -74,10 +76,12 @@ class FormPersonaState extends State<FormPersona> {
             TextFormField(
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                labelText: 'Telefono',
+                labelText: 'Teléfono',
               ),
               keyboardType: TextInputType.number,
-              initialValue: widget.persona.telefono.toString(),
+              initialValue: widget.persona.telefono != null
+                  ? widget.persona.telefono.toString()
+                  : '',
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'No puede estar vacio';

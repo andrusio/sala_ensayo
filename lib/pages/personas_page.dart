@@ -22,7 +22,14 @@ class _PersonasPageState extends State<PersonasPage> {
       drawer: const PanelLateralWidget(),
       body: _lista(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => print('hola'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PersonaCRUD(persona: Persona()),
+            ),
+          );
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -61,7 +68,8 @@ class PersonaLista extends StatelessWidget {
       itemBuilder: (context, index) {
         return ListTile(
           leading: const Icon(Icons.account_circle),
-          title: Text(personas[index].apellido + ', ' + personas[index].nombre),
+          title:
+              Text(personas[index].apellido! + ', ' + personas[index].nombre!),
           trailing: IconButton(
             icon: Icon(Icons.play_arrow),
             onPressed: () {

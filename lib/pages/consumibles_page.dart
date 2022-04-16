@@ -58,7 +58,7 @@ class PersonaLista extends StatelessWidget {
       itemBuilder: (context, index) {
         return ListTile(
           leading: const Icon(Icons.account_circle),
-          title: Text(personas[index].apellido),
+          title: Text(personas[index].apellido!),
           trailing: Icon(Icons.more_vert),
           subtitle: Text('Concat de bandas'),
         );

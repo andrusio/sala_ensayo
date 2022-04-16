@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/pages/personas_page.dart';
 import 'package:sala_ensayo/pages/salas_page.dart';
+import '../env.dart';
 
 class PanelLateralWidget extends StatelessWidget {
   const PanelLateralWidget({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class PanelLateralWidget extends StatelessWidget {
               color: Colors.blue,
             ),
             child: Text(
-              'Nombre Comercio',
+              Env.nombreComercio,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
