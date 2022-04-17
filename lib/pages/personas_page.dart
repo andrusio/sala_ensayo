@@ -56,27 +56,34 @@ class _PersonasPageState extends State<PersonasPage> {
   }
 }
 
-class PersonaLista extends StatelessWidget {
+class PersonaLista extends StatefulWidget {
   const PersonaLista({Key? key, required this.personas}) : super(key: key);
 
   final List<Persona> personas;
 
   @override
+  State<PersonaLista> createState() => _PersonaListaState();
+}
+
+class _PersonaListaState extends State<PersonaLista> {
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: personas.length,
+      itemCount: widget.personas.length,
       itemBuilder: (context, index) {
         return ListTile(
           leading: const Icon(Icons.account_circle),
-          title:
-              Text(personas[index].apellido! + ', ' + personas[index].nombre!),
+          title: Text(widget.personas[index].apellido! +
+              ', ' +
+              widget.personas[index].nombre!),
           trailing: IconButton(
             icon: Icon(Icons.play_arrow),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PersonaCRUD(persona: personas[index]),
+                  builder: (context) =>
+                      PersonaCRUD(persona: widget.personas[index]),
                 ),
               );
             },

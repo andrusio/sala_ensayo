@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../env.dart';
 
@@ -22,6 +22,18 @@ class Persona {
         apellido: json['apellido'],
         telefono: json['telefono'],
       );
+}
+
+class Respuesta {
+  Color color;
+  String texto;
+  bool status;
+
+  Respuesta({
+    required this.color,
+    required this.texto,
+    required this.status,
+  });
 }
 
 Future<List<Persona>> fetchPersonas(http.Client client) async {
@@ -52,15 +64,13 @@ crearPersona(String nombre, String apellido, String telefono) async {
       }));
 
   if (response.statusCode == 201) {
-    // If the server did return a 201 CREATED response,
-    // then parse the JSON.
-    // return Persona.fromJson(jsonDecode(response.body));
-    return 'Persona creada con éxito';
+    Respuesta respuesta = Respuesta(
+        color: Colors.green, texto: 'Persona creada con éxito', status: true);
+    return respuesta;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    //throw Exception('Fallo al crear perona.');
-    return 'Error al crear persona';
+    Respuesta respuesta = Respuesta(
+        color: Colors.red, texto: 'Error al crear persona', status: false);
+    return respuesta;
   }
 }
 
@@ -72,16 +82,16 @@ eliminarPersona(int id) async {
     },
   );
 
-  if (response.statusCode == 200) {
-    // If the server did return a 201 CREATED response,
-    // then parse the JSON.
-    // return Persona.fromJson(jsonDecode(response.body));
-    return 'Persona elimina con éxito';
+  if (response.statusCode == 204) {
+    Respuesta respuesta = Respuesta(
+        color: Colors.green,
+        texto: 'Persona eliminada con éxito',
+        status: true);
+    return respuesta;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    //throw Exception('Fallo al crear perona.');
-    return 'Error al eliminar persona';
+    Respuesta respuesta = Respuesta(
+        color: Colors.red, texto: 'Error al eliminar persona', status: false);
+    return respuesta;
   }
 }
 
@@ -98,14 +108,14 @@ modificarPersona(
       }));
 
   if (response.statusCode == 200) {
-    // If the server did return a 201 CREATED response,
-    // then parse the JSON.
-    // return Persona.fromJson(jsonDecode(response.body));
-    return 'Persona creada con éxito';
+    Respuesta respuesta = Respuesta(
+        color: Colors.green,
+        texto: 'Persona modificada con éxito',
+        status: true);
+    return respuesta;
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    //throw Exception('Fallo al crear perona.');
-    return 'Error al crear persona';
+    Respuesta respuesta = Respuesta(
+        color: Colors.red, texto: 'Error al editar persona', status: false);
+    return respuesta;
   }
 }

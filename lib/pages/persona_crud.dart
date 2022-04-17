@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/models/persona.dart';
+import 'dart:developer';
 
 class PersonaCRUD extends StatefulWidget {
   const PersonaCRUD({Key? key, required Persona this.persona})
@@ -114,32 +115,33 @@ class FormPersonaState extends State<FormPersona> {
           if (widget.persona.id != null) ...[
             ElevatedButton(
               style: ElevatedButton.styleFrom(primary: Colors.red),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    dynamic respuesta = eliminarPersona(widget.persona.id!);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(respuesta.toString()),
-                    ));
-                  });
+                  Respuesta respuesta =
+                      await eliminarPersona(widget.persona.id!);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(respuesta.texto),
+                    backgroundColor: respuesta.color,
+                  ));
+                  Navigator.pop(context);
                 }
               },
               child: const Text('Eliminar'),
             ),
             const SizedBox(width: 25),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    dynamic respuesta = modificarPersona(
-                        widget.persona.id!,
-                        nombreController.text,
-                        apellidoController.text,
-                        telefonoController.text);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(respuesta.toString()),
-                    ));
-                  });
+                  Respuesta respuesta = await modificarPersona(
+                      widget.persona.id!,
+                      nombreController.text,
+                      apellidoController.text,
+                      telefonoController.text);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(respuesta.texto),
+                    backgroundColor: respuesta.color,
+                  ));
+                  Navigator.pop(context);
                 }
               },
               child: const Text('Editar'),
@@ -147,15 +149,17 @@ class FormPersonaState extends State<FormPersona> {
           ],
           if (widget.persona.id == null) ...[
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    dynamic respuesta = crearPersona(nombreController.text,
-                        apellidoController.text, telefonoController.text);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(respuesta.toString()),
-                    ));
-                  });
+                  Respuesta respuesta = await crearPersona(
+                      nombreController.text,
+                      apellidoController.text,
+                      telefonoController.text);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(respuesta.texto),
+                    backgroundColor: respuesta.color,
+                  ));
+                  Navigator.pop(context);
                 }
               },
               child: const Text('Guardar'),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sala_ensayo/routes/routes.dart';
 import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
+
+import 'env.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +19,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Nombre Comercio'),
+      debugShowCheckedModeBanner: false,
+      home: const MyHomePage(title: Env.nombreComercio),
+      //initialRoute: 'personas',
+      //routes: getApplicationRoutes(),
     );
   }
 }
