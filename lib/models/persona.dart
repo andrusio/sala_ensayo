@@ -57,10 +57,10 @@ crearPersona(String nombre, String apellido, String telefono) async {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
         'nombre': nombre,
         'apellido': apellido,
-        'telefono': telefono.toString(),
+        'telefono': int.parse(telefono),
       }));
 
   if (response.statusCode == 201) {

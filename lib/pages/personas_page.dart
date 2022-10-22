@@ -77,7 +77,7 @@ class _PersonaListaState extends State<PersonaLista> {
               ', ' +
               widget.personas[index].nombre!),
           trailing: IconButton(
-            icon: Icon(Icons.play_arrow),
+            icon: const Icon(Icons.play_arrow),
             onPressed: () {
               Navigator.push(
                 context,

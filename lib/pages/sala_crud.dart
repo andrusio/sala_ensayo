@@ -1,54 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:sala_ensayo/models/persona.dart';
-import 'dart:developer';
+import 'package:sala_ensayo/models/sala.dart';
 
-class PersonaCRUD extends StatefulWidget {
-  const PersonaCRUD({Key? key, required Persona this.persona})
-      : super(key: key);
+class SalaCRUD extends StatefulWidget {
+  const SalaCRUD({Key? key, required Sala this.sala}) : super(key: key);
 
-  final Persona persona;
+  final Sala sala;
 
   @override
-  State<PersonaCRUD> createState() => _PersonaCRUDState();
+  State<SalaCRUD> createState() => _SalaCRUDState();
 }
 
-class _PersonaCRUDState extends State<PersonaCRUD> {
+class _SalaCRUDState extends State<SalaCRUD> {
   @override
   Widget build(BuildContext context) {
-    String titulo =
-        widget.persona.id == null ? 'Agregar persona' : 'Editar persona';
+    String titulo = widget.sala.id == null ? 'Agregar Sala' : 'Editar Sala';
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),
       ),
-      body: FormPersona(persona: widget.persona),
+      body: FormSala(sala: widget.sala),
     );
   }
 }
 
-class FormPersona extends StatefulWidget {
-  const FormPersona({Key? key, required this.persona}) : super(key: key);
-  final Persona persona;
+class FormSala extends StatefulWidget {
+  const FormSala({Key? key, required this.sala}) : super(key: key);
+  final Sala sala;
 
   @override
-  FormPersonaState createState() {
-    return FormPersonaState();
+  FormSalaState createState() {
+    return FormSalaState();
   }
 }
 
-class FormPersonaState extends State<FormPersona> {
+class FormSalaState extends State<FormSala> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nombreController = TextEditingController();
-  final TextEditingController apellidoController = TextEditingController();
-  final TextEditingController telefonoController = TextEditingController();
+  final TextEditingController precioHoraController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    nombreController.text = widget.persona.nombre ?? '';
-    apellidoController.text = widget.persona.apellido ?? '';
-    telefonoController.text = widget.persona.telefono != null
-        ? widget.persona.telefono.toString()
-        : '';
+    nombreController.text = widget.sala.nombre ?? '';
+    precioHoraController.text =
+        widget.sala.precioHora != null ? widget.sala.precioHora.toString() : '';
 
     return Form(
       key: _formKey,
@@ -75,20 +69,7 @@ class FormPersonaState extends State<FormPersona> {
             TextFormField(
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
-                labelText: 'Apellido',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'No puede estar vacio';
-                }
-                return null;
-              },
-              controller: apellidoController,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Teléfono',
+                labelText: 'Precio por Hora',
               ),
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -97,7 +78,7 @@ class FormPersonaState extends State<FormPersona> {
                 }
                 return null;
               },
-              controller: telefonoController,
+              controller: precioHoraController,
             ),
             botonera(),
           ],
@@ -112,13 +93,12 @@ class FormPersonaState extends State<FormPersona> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if (widget.persona.id != null) ...[
+          if (widget.sala.id != null) ...[
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Respuesta respuesta =
-                      await eliminarPersona(widget.persona.id!);
+                  Respuesta respuesta = await eliminarSala(widget.sala.id!);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(respuesta.texto),
                     backgroundColor: respuesta.color,
@@ -132,11 +112,8 @@ class FormPersonaState extends State<FormPersona> {
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Respuesta respuesta = await modificarPersona(
-                      widget.persona.id!,
-                      nombreController.text,
-                      apellidoController.text,
-                      telefonoController.text);
+                  Respuesta respuesta = await modificarSala(widget.sala.id!,
+                      nombreController.text, precioHoraController.text);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(respuesta.texto),
                     backgroundColor: respuesta.color,
@@ -147,14 +124,12 @@ class FormPersonaState extends State<FormPersona> {
               child: const Text('Editar'),
             ),
           ],
-          if (widget.persona.id == null) ...[
+          if (widget.sala.id == null) ...[
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Respuesta respuesta = await crearPersona(
-                      nombreController.text,
-                      apellidoController.text,
-                      telefonoController.text);
+                  Respuesta respuesta = await crearSala(
+                      nombreController.text, precioHoraController.text);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(respuesta.texto),
                     backgroundColor: respuesta.color,
