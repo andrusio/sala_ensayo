@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/routes/routes.dart';
 import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'env.dart';
 
@@ -15,6 +16,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // idioma para calendario
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('es'),
+      ],
+      locale: const Locale('es'),
+      //fin idioma para calendario
       title: 'Gestión Salas',
       theme: ThemeData(
         primarySwatch: Colors.blue,

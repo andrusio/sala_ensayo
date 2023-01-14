@@ -30,7 +30,7 @@ class _PersonasPageState extends State<PersonasPage> {
             ),
           );
         },
-        tooltip: 'Increment',
+        tooltip: 'Agregar',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

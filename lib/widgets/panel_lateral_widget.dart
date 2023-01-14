@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/pages/personas_page.dart';
 import 'package:sala_ensayo/pages/salas_page.dart';
+import 'package:sala_ensayo/pages/agenda_page.dart';
 import '../env.dart';
 
 class PanelLateralWidget extends StatelessWidget {
@@ -24,6 +25,16 @@ class PanelLateralWidget extends StatelessWidget {
                 fontSize: 24,
               ),
             ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.calendar_today),
+            title: const Text('Agenda'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AgendaPage()),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.my_library_music),

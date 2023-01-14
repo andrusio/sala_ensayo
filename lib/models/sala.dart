@@ -40,7 +40,7 @@ Future<List<Sala>> fetchSalas(http.Client client) async {
 }
 
 crearSala(String nombre, String precioHora) async {
-  final response = await http.post(Uri.parse(Env.baseUrl + '/salas/'),
+  final response = await http.post(Uri.parse(Env.baseUrl + '/sala'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -62,7 +62,7 @@ crearSala(String nombre, String precioHora) async {
 
 eliminarSala(int id) async {
   final response = await http.delete(
-    Uri.parse(Env.baseUrl + '/salas/$id/'),
+    Uri.parse(Env.baseUrl + '/sala/$id/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -80,7 +80,7 @@ eliminarSala(int id) async {
 }
 
 modificarSala(int id, String nombre, String precioHora) async {
-  final response = await http.put(Uri.parse(Env.baseUrl + '/salas/$id/'),
+  final response = await http.put(Uri.parse(Env.baseUrl + '/sala/$id/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

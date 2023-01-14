@@ -53,7 +53,7 @@ Future<List<Persona>> fetchPersonas(http.Client client) async {
 // }
 
 crearPersona(String nombre, String apellido, String telefono) async {
-  final response = await http.post(Uri.parse(Env.baseUrl + '/personas/'),
+  final response = await http.post(Uri.parse(Env.baseUrl + '/persona'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -76,7 +76,7 @@ crearPersona(String nombre, String apellido, String telefono) async {
 
 eliminarPersona(int id) async {
   final response = await http.delete(
-    Uri.parse(Env.baseUrl + '/personas/$id/'),
+    Uri.parse(Env.baseUrl + '/persona/$id/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -97,7 +97,7 @@ eliminarPersona(int id) async {
 
 modificarPersona(
     int id, String nombre, String apellido, String telefono) async {
-  final response = await http.put(Uri.parse(Env.baseUrl + '/personas/$id/'),
+  final response = await http.put(Uri.parse(Env.baseUrl + '/persona/$id/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

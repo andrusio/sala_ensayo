@@ -26,7 +26,7 @@ class SalasPage extends StatelessWidget {
             ),
           );
         },
-        tooltip: 'Increment',
+        tooltip: 'Agregar',
         child: const Icon(Icons.add),
       ), // This t
     );
