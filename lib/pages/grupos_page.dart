@@ -63,58 +63,22 @@ class GrupoLista extends StatefulWidget {
 class _GrupoListaState extends State<GrupoLista> {
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+    return ListView.builder(
       itemCount: widget.grupos.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: Container(
-            height: 290,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(5),
-            child: Stack(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              GrupoCRUD(grupo: widget.grupos[index])),
-                    );
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: Image.network(
-                          'https://tech.pelmorex.com/wp-content/uploads/2020/10/flutter.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Text(
-                        widget.grupos[index].nombre!,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+        return ListTile(
+          leading: const Icon(Icons.people),
+          title: Text(widget.grupos[index].nombre!),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GrupoCRUD(grupo: widget.grupos[index]),
+              ),
+            );
+          },
         );
       },
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.0,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5,
-        mainAxisExtent: 200,
-      ),
     );
   }
 }

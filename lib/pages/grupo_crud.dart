@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/models/grupo.dart';
+import 'package:sala_ensayo/pages/persona_crud.dart';
 
 class GrupoCRUD extends StatefulWidget {
   const GrupoCRUD({Key? key, required this.grupo}) : super(key: key);
@@ -17,16 +18,16 @@ class _GrupoCRUDState extends State<GrupoCRUD> {
   Widget build(BuildContext context) {
     String titulo = widget.grupo.id == null ? 'Agregar Grupo' : 'Editar Grupo';
     return Scaffold(
-        appBar: AppBar(
-          title: Text(titulo),
-        ),
-        body: Column(
-          children: [
-            FormGrupo(grupo: widget.grupo),
-            Text(widget.grupo.personas.first.nombre.toString()),
-            // Text(integrantes.toString()),
-          ],
-        ));
+      appBar: AppBar(
+        title: Text(titulo),
+      ),
+      body: Column(
+        children: [
+          FormGrupo(grupo: widget.grupo),
+          Integrantes(grupo: widget.grupo),
+        ],
+      ),
+    );
   }
 }
 
@@ -48,30 +49,32 @@ class FormGrupoState extends State<FormGrupo> {
   Widget build(BuildContext context) {
     nombreController.text = widget.grupo.nombre ?? '';
 
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Nombre',
+    return Card(
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Nombre',
+                ),
+                //initialValue: widget.persona.nombre,
+                //onFieldSubmitted: //aca
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'No puede estar vacio';
+                  }
+                  return null;
+                },
+                controller: nombreController,
               ),
-              //initialValue: widget.persona.nombre,
-              //onFieldSubmitted: //aca
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'No puede estar vacio';
-                }
-                return null;
-              },
-              controller: nombreController,
-            ),
-            botonera(),
-          ],
+              botonera(),
+            ],
+          ),
         ),
       ),
     );
@@ -79,7 +82,7 @@ class FormGrupoState extends State<FormGrupo> {
 
   Widget botonera() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.only(top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -127,6 +130,73 @@ class FormGrupoState extends State<FormGrupo> {
                 }
               },
               child: const Text('Guardar'),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class Integrantes extends StatelessWidget {
+  const Integrantes({Key? key, required this.grupo}) : super(key: key);
+  final Grupo grupo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          if (grupo.id != null) ...[
+            Container(
+              color: Colors.blueAccent,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(5),
+              child: const Text(
+                "Integrantes",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            GridView.builder(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              itemCount: grupo.personas.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  childAspectRatio: 1.0,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  mainAxisExtent: 100),
+              itemBuilder: (context, index) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      hoverColor: Colors.blueAccent,
+                      color: Colors.blueAccent,
+                      icon: const Icon(Icons.person),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PersonaCRUD(persona: grupo.personas[index]),
+                          ),
+                        );
+                      },
+                    ),
+                    Text(
+                        grupo.personas[index].nombre! +
+                            ' ' +
+                            grupo.personas[index].apellido!,
+                        overflow: TextOverflow.ellipsis),
+                  ],
+                );
+              },
             ),
           ],
         ],
