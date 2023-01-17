@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../env.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'persona.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 class Persona {
   int? id;
   String? nombre;
@@ -16,12 +19,15 @@ class Persona {
     this.telefono,
   });
 
-  factory Persona.fromJson(Map<String, dynamic> json) => Persona(
-        id: json['id'],
-        nombre: json['nombre'],
-        apellido: json['apellido'],
-        telefono: json['telefono'],
-      );
+  factory Persona.fromJson(Map<String, dynamic> json) =>
+      _$PersonaFromJson(json);
+  Map<String, dynamic> toJson() => _$PersonaToJson(this);
+  // factory Persona.fromJson(Map<String, dynamic> json) => Persona(
+  //       id: json['id'],
+  //       nombre: json['nombre'],
+  //       apellido: json['apellido'],
+  //       telefono: json['telefono'],
+  //     );
 }
 
 class Respuesta {

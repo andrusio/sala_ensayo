@@ -16,10 +16,6 @@ class _GrupoCRUDState extends State<GrupoCRUD> {
   @override
   Widget build(BuildContext context) {
     String titulo = widget.grupo.id == null ? 'Agregar Grupo' : 'Editar Grupo';
-    inspect(widget.grupo);
-    String? integrantes = widget.grupo.personas != null
-        ? widget.grupo.personas![0].nombre
-        : 'vacio';
     return Scaffold(
         appBar: AppBar(
           title: Text(titulo),
@@ -27,8 +23,8 @@ class _GrupoCRUDState extends State<GrupoCRUD> {
         body: Column(
           children: [
             FormGrupo(grupo: widget.grupo),
-            Text(widget.grupo.personas.toString()),
-            Text(integrantes.toString()),
+            Text(widget.grupo.personas.first.nombre.toString()),
+            // Text(integrantes.toString()),
           ],
         ));
   }

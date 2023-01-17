@@ -3,29 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/models/persona.dart';
 import '../env.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'grupo.g.dart';
 
+// https://docs.flutter.dev/development/data-and-backend/json#which-json-serialization-method-is-right-for-me
+
+@JsonSerializable(explicitToJson: true)
 class Grupo {
   int? id;
   String? nombre;
-  List<Persona>? personas;
+  List<Persona> personas;
 
-  Grupo({
-    this.id,
-    this.nombre,
-    this.personas,
-  });
+  Grupo({this.id, this.nombre, List<Persona>? personas})
+      : personas = personas ?? <Persona>[];
 
-  factory Grupo.fromJson(Map<String, dynamic> json) {
-    final personasLista = json['personas'] as List<Persona>;
-    List<Persona> personas =
-        personasLista.map((i) => Persona.fromJson(i)).toList();
-    return Grupo(
-      id: json['id'],
-      nombre: json['nombre'],
-      // personas: json['personas'],
-      personas: personasLista,
-    );
-  }
+  factory Grupo.fromJson(Map<String, dynamic> json) => _$GrupoFromJson(json);
+  Map<String, dynamic> toJson() => _$GrupoToJson(this);
+
+  // factory Grupo.fromJson(Map<String, dynamic> json) {
+  //   final personasLista = json['personas'] as List<Persona>;
+  //   List<Persona> personas =
+  //       personasLista.map((i) => Persona.fromJson(i)).toList();
+  //   return Grupo(
+  //     id: json['id'],
+  //     nombre: json['nombre'],
+  //     // personas: json['personas'],
+  //     personas: personasLista,
+  //   );
+  // }
 }
 
 class Respuesta {
