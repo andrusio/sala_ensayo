@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/models/persona.dart';
 import '../env.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sala_ensayo/models/clases_generales.dart';
 part 'grupo.g.dart';
 
 // https://docs.flutter.dev/development/data-and-backend/json#which-json-serialization-method-is-right-for-me
@@ -31,18 +32,6 @@ class Grupo {
   //     personas: personasLista,
   //   );
   // }
-}
-
-class Respuesta {
-  Color color;
-  String texto;
-  bool status;
-
-  Respuesta({
-    required this.color,
-    required this.texto,
-    required this.status,
-  });
 }
 
 Future<List<Grupo>> fetchGrupos(http.Client client) async {
@@ -106,6 +95,30 @@ modificarGrupo(int id, String nombre) async {
   } else {
     Respuesta respuesta = Respuesta(
         color: Colors.red, texto: 'Error al editar Grupo', status: false);
+    return respuesta;
+  }
+}
+
+agregarIntegrante(int idGrupo, int idPersona) async {
+  final response = await http.put(
+      Uri.parse(Env.baseUrl + '/grupo/agregar_integrante/$idGrupo/$idPersona'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'idgrupo': idGrupo.toString(),
+        'idpersona': idPersona.toString(),
+      }));
+
+  if (response.statusCode == 200) {
+    Respuesta respuesta = Respuesta(
+        color: Colors.green,
+        texto: 'Integrante agregado con éxito',
+        status: true);
+    return respuesta;
+  } else {
+    Respuesta respuesta = Respuesta(
+        color: Colors.red, texto: 'Error al agregar integrante', status: false);
     return respuesta;
   }
 }

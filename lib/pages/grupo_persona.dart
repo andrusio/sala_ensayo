@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/models/persona.dart';
+import 'package:sala_ensayo/models/grupo.dart';
 import 'package:sala_ensayo/pages/persona_crud.dart';
 import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
+import 'package:sala_ensayo/models/clases_generales.dart';
 
-class PersonasPage extends StatefulWidget {
-  const PersonasPage({Key? key}) : super(key: key);
+class GrupoPersonaPage extends StatefulWidget {
+  const GrupoPersonaPage({Key? key, required this.grupo}) : super(key: key);
+
+  final Grupo grupo;
 
   @override
-  _PersonasPageState createState() => _PersonasPageState();
+  _GrupoPersonaPageState createState() => _GrupoPersonaPageState();
 }
 
-class _PersonasPageState extends State<PersonasPage> {
+class _GrupoPersonaPageState extends State<GrupoPersonaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Personas'),
+        title: const Text('Agregar Integrante'),
         centerTitle: true,
       ),
       drawer: const PanelLateralWidget(),
-      body: _lista(),
+      body: _lista(widget.grupo),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -28,7 +32,7 @@ class _PersonasPageState extends State<PersonasPage> {
             MaterialPageRoute(
               builder: (context) => PersonaCRUD(persona: Persona()),
             ),
-          ).then((value) => setState((() {})));
+          );
         },
         tooltip: 'Agregar',
         child: const Icon(Icons.add),
@@ -36,7 +40,7 @@ class _PersonasPageState extends State<PersonasPage> {
     );
   }
 
-  Widget _lista() {
+  Widget _lista(Grupo grupo) {
     return FutureBuilder<List<Persona>>(
       future: fetchPersonas(http.Client()),
       builder: (context, snapshot) {
@@ -45,7 +49,7 @@ class _PersonasPageState extends State<PersonasPage> {
             child: Text('No se puso conectar con el servidor'),
           );
         } else if (snapshot.hasData) {
-          return PersonaLista(personas: snapshot.data!);
+          return GrupoPersonaLista(personas: snapshot.data!, grupo: grupo);
         } else {
           return const Center(
             child: CircularProgressIndicator(),
@@ -56,39 +60,41 @@ class _PersonasPageState extends State<PersonasPage> {
   }
 }
 
-class PersonaLista extends StatefulWidget {
-  const PersonaLista({Key? key, required this.personas}) : super(key: key);
+class GrupoPersonaLista extends StatefulWidget {
+  const GrupoPersonaLista(
+      {Key? key, required this.personas, required this.grupo})
+      : super(key: key);
 
   final List<Persona> personas;
+  final Grupo grupo;
 
   @override
-  State<PersonaLista> createState() => _PersonaListaState();
+  State<GrupoPersonaLista> createState() => _GrupoPersonaListaState();
 }
 
-class _PersonaListaState extends State<PersonaLista> {
+class _GrupoPersonaListaState extends State<GrupoPersonaLista> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: widget.personas.length,
       itemBuilder: (context, index) {
         return ListTile(
-          leading: const Icon(Icons.account_circle),
+          leading: IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () async {
+              Respuesta respuesta = await agregarIntegrante(
+                  widget.grupo.id!, widget.personas[index].id!);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(respuesta.texto),
+                backgroundColor: respuesta.color,
+              ));
+              Navigator.pop(context);
+            },
+          ),
           title: Text(widget.personas[index].apellido! +
               ', ' +
               widget.personas[index].nombre!),
-          trailing: IconButton(
-            icon: const Icon(Icons.play_arrow),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      PersonaCRUD(persona: widget.personas[index]),
-                ),
-              );
-            },
-          ),
-          subtitle: Text('Concat de bandas'),
+          // subtitle: Text('Concat de bandas'),
         );
       },
     );

@@ -1,8 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/models/grupo.dart';
+import 'package:sala_ensayo/pages/grupo_persona.dart';
 import 'package:sala_ensayo/pages/persona_crud.dart';
+import 'package:sala_ensayo/models/clases_generales.dart';
 
 class GrupoCRUD extends StatefulWidget {
   const GrupoCRUD({Key? key, required this.grupo}) : super(key: key);
@@ -138,20 +138,32 @@ class FormGrupoState extends State<FormGrupo> {
   }
 }
 
-class Integrantes extends StatelessWidget {
+class Integrantes extends StatefulWidget {
   const Integrantes({Key? key, required this.grupo}) : super(key: key);
   final Grupo grupo;
 
   @override
+  State<Integrantes> createState() => _IntegrantesState();
+}
+
+class _IntegrantesState extends State<Integrantes> {
+  @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
-          if (grupo.id != null) ...[
+          if (widget.grupo.id != null) ...[
             Container(
-              color: Colors.blueAccent,
               alignment: Alignment.center,
               padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                ),
+              ),
               child: const Text(
                 "Integrantes",
                 style: TextStyle(
@@ -163,7 +175,7 @@ class Integrantes extends StatelessWidget {
             GridView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              itemCount: grupo.personas.length,
+              itemCount: widget.grupo.personas.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
                   childAspectRatio: 1.0,
@@ -183,21 +195,35 @@ class Integrantes extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                PersonaCRUD(persona: grupo.personas[index]),
+                            builder: (context) => PersonaCRUD(
+                                persona: widget.grupo.personas[index]),
                           ),
                         );
                       },
                     ),
                     Text(
-                        grupo.personas[index].nombre! +
+                        widget.grupo.personas[index].nombre! +
                             ' ' +
-                            grupo.personas[index].apellido!,
+                            widget.grupo.personas[index].apellido!,
                         overflow: TextOverflow.ellipsis),
                   ],
                 );
               },
             ),
+            ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(CircleBorder()),
+              ),
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GrupoPersonaPage(grupo: widget.grupo),
+                  ),
+                ),
+              },
+              child: Icon(Icons.add),
+            )
           ],
         ],
       ),

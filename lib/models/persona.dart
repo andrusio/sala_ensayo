@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:sala_ensayo/models/clases_generales.dart';
 import 'package:http/http.dart' as http;
 import '../env.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -28,18 +29,6 @@ class Persona {
   //       apellido: json['apellido'],
   //       telefono: json['telefono'],
   //     );
-}
-
-class Respuesta {
-  Color color;
-  String texto;
-  bool status;
-
-  Respuesta({
-    required this.color,
-    required this.texto,
-    required this.status,
-  });
 }
 
 Future<List<Persona>> fetchPersonas(http.Client client) async {
