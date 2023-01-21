@@ -11,7 +11,7 @@ class Persona {
   int? id;
   String? nombre;
   String? apellido;
-  int? telefono;
+  String? telefono;
 
   Persona({
     this.id,
@@ -55,7 +55,7 @@ crearPersona(String nombre, String apellido, String telefono) async {
       body: jsonEncode(<String, dynamic>{
         'nombre': nombre,
         'apellido': apellido,
-        'telefono': int.parse(telefono),
+        'telefono': telefono,
       }));
 
   if (response.statusCode == 201) {
@@ -99,7 +99,7 @@ modificarPersona(
       body: jsonEncode(<String, String>{
         'nombre': nombre,
         'apellido': apellido,
-        'telefono': telefono.toString(),
+        'telefono': telefono,
       }));
 
   if (response.statusCode == 200) {

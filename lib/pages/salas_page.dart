@@ -104,7 +104,7 @@ class _SalaListaState extends State<SalaLista> {
                         children: [
                           Text(
                             'Precio/hora: ' +
-                                widget.salas[index].precioHora!.toString(),
+                                widget.salas[index].precio!.toString(),
                           ),
                         ],
                       )

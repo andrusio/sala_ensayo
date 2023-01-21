@@ -73,9 +73,9 @@ class _PersonaListaState extends State<PersonaLista> {
       itemBuilder: (context, index) {
         return ListTile(
           leading: const Icon(Icons.account_circle),
-          title: Text(widget.personas[index].apellido! +
+          title: Text(widget.personas[index].nombre! +
               ', ' +
-              widget.personas[index].nombre!),
+              widget.personas[index].apellido!),
           trailing: IconButton(
             icon: const Icon(Icons.play_arrow),
             onPressed: () {

@@ -36,13 +36,13 @@ class FormSala extends StatefulWidget {
 class FormSalaState extends State<FormSala> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nombreController = TextEditingController();
-  final TextEditingController precioHoraController = TextEditingController();
+  final TextEditingController precioController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     nombreController.text = widget.sala.nombre ?? '';
-    precioHoraController.text =
-        widget.sala.precioHora != null ? widget.sala.precioHora.toString() : '';
+    precioController.text =
+        widget.sala.precio != null ? widget.sala.precio.toString() : '';
 
     return Form(
       key: _formKey,
@@ -78,7 +78,7 @@ class FormSalaState extends State<FormSala> {
                 }
                 return null;
               },
-              controller: precioHoraController,
+              controller: precioController,
             ),
             botonera(),
           ],
@@ -113,7 +113,7 @@ class FormSalaState extends State<FormSala> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   Respuesta respuesta = await modificarSala(widget.sala.id!,
-                      nombreController.text, precioHoraController.text);
+                      nombreController.text, precioController.text);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(respuesta.texto),
                     backgroundColor: respuesta.color,
@@ -129,7 +129,7 @@ class FormSalaState extends State<FormSala> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   Respuesta respuesta = await crearSala(
-                      nombreController.text, precioHoraController.text);
+                      nombreController.text, precioController.text);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(respuesta.texto),
                     backgroundColor: respuesta.color,

@@ -100,17 +100,14 @@ modificarGrupo(int id, String nombre) async {
 }
 
 agregarIntegrante(int idGrupo, int idPersona) async {
-  final response = await http.put(
-      Uri.parse(Env.baseUrl + '/grupo/agregar_integrante/$idGrupo/$idPersona'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'idgrupo': idGrupo.toString(),
-        'idpersona': idPersona.toString(),
-      }));
+  final response = await http.post(
+    Uri.parse(Env.baseUrl + '/persona_grupo/$idGrupo/$idPersona'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     Respuesta respuesta = Respuesta(
         color: Colors.green,
         texto: 'Integrante agregado con éxito',
