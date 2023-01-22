@@ -39,6 +39,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   json_annotation: ^4.7.0
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:

@@ -107,9 +107,17 @@ class _SalaListaState extends State<SalaLista> {
                                 widget.salas[index].precio!.toString(),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
+                ),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundColor: widget.salas[index].color,
+                    ),
+                  ],
                 ),
               ],
             ),
