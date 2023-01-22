@@ -21,9 +21,7 @@ class _GrupoPersonaPageState extends State<GrupoPersonaPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agregar Integrante'),
-        centerTitle: true,
       ),
-      drawer: const PanelLateralWidget(),
       body: _lista(widget.grupo),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
