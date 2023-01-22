@@ -3,6 +3,7 @@ import 'package:sala_ensayo/models/grupo.dart';
 import 'package:sala_ensayo/pages/grupo_persona.dart';
 import 'package:sala_ensayo/pages/persona_crud.dart';
 import 'package:sala_ensayo/models/clases_generales.dart';
+import 'package:http/http.dart' as http;
 
 class GrupoCRUD extends StatefulWidget {
   const GrupoCRUD({Key? key, required this.grupo}) : super(key: key);
@@ -24,7 +25,7 @@ class _GrupoCRUDState extends State<GrupoCRUD> {
       body: Column(
         children: [
           FormGrupo(grupo: widget.grupo),
-          Integrantes(grupo: widget.grupo),
+          _integrantes(widget.grupo),
         ],
       ),
     );
@@ -138,6 +139,29 @@ class FormGrupoState extends State<FormGrupo> {
   }
 }
 
+Widget _integrantes(Grupo grupo) {
+  if (grupo.id != null) {
+    return FutureBuilder<Grupo>(
+      future: fetchPersonasGrupo(http.Client(), grupo.id!),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('No se pudo conectar con el servidor'),
+          );
+        } else if (snapshot.hasData) {
+          return Integrantes(grupo: snapshot.data!);
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  } else {
+    return const SizedBox();
+  }
+}
+
 class Integrantes extends StatefulWidget {
   const Integrantes({Key? key, required this.grupo}) : super(key: key);
   final Grupo grupo;
@@ -153,78 +177,76 @@ class _IntegrantesState extends State<Integrantes> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
-          if (widget.grupo.id != null) ...[
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(5),
-              decoration: const BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
-                ),
-              ),
-              child: const Text(
-                "Integrantes",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(5),
+            decoration: const BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
               ),
             ),
-            GridView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              itemCount: widget.grupo.personas.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  childAspectRatio: 1.0,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  mainAxisExtent: 100),
-              itemBuilder: (context, index) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      hoverColor: Colors.blueAccent,
-                      color: Colors.blueAccent,
-                      icon: const Icon(Icons.person),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PersonaCRUD(
-                                persona: widget.grupo.personas[index]),
-                          ),
-                        );
-                      },
-                    ),
-                    Text(
-                        widget.grupo.personas[index].nombre! +
-                            ' ' +
-                            widget.grupo.personas[index].apellido!,
-                        overflow: TextOverflow.ellipsis),
-                  ],
-                );
-              },
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(CircleBorder()),
+            child: const Text(
+              "Integrantes",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
-              onPressed: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GrupoPersonaPage(grupo: widget.grupo),
+            ),
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            itemCount: widget.grupo.personas.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                mainAxisExtent: 100),
+            itemBuilder: (context, index) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    hoverColor: Colors.blueAccent,
+                    color: Colors.blueAccent,
+                    icon: const Icon(Icons.person),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PersonaCRUD(
+                              persona: widget.grupo.personas[index]),
+                        ),
+                      );
+                    },
                   ),
+                  Text(
+                      widget.grupo.personas[index].nombre! +
+                          ' ' +
+                          widget.grupo.personas[index].apellido!,
+                      overflow: TextOverflow.ellipsis),
+                ],
+              );
+            },
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(const CircleBorder()),
+            ),
+            onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GrupoPersonaPage(grupo: widget.grupo),
                 ),
-              },
-              child: Icon(Icons.add),
-            )
-          ],
+              ),
+            },
+            child: const Icon(Icons.add),
+          )
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/models/persona.dart';
@@ -118,4 +119,10 @@ agregarIntegrante(int idGrupo, int idPersona) async {
         color: Colors.red, texto: 'Error al agregar integrante', status: false);
     return respuesta;
   }
+}
+
+Future<Grupo> fetchPersonasGrupo(http.Client client, int idGrupo) async {
+  final response =
+      await client.get(Uri.parse(Env.baseUrl + '/persona_grupo/$idGrupo'));
+  return Grupo.fromJson(json.decode(response.body));
 }
