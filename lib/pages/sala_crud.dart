@@ -1,8 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:sala_ensayo/models/sala.dart';
+
+import '../models/clases_generales.dart';
 
 class SalaCRUD extends StatefulWidget {
   const SalaCRUD({Key? key, required Sala this.sala}) : super(key: key);

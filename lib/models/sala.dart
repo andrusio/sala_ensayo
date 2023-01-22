@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sala_ensayo/models/clases_generales.dart';
 import '../env.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'sala.g.dart';
@@ -16,24 +17,6 @@ class Sala {
 
   factory Sala.fromJson(Map<String, dynamic> json) => _$SalaFromJson(json);
   Map<String, dynamic> toJson() => _$SalaToJson(this);
-
-  // factory Sala.fromJson(Map<String, dynamic> json) => Sala(
-  //       id: json['id'],
-  //       nombre: json['nombre'],
-  //       precio: (json['precio'].toDouble()),
-  //     );
-}
-
-class Respuesta {
-  Color color;
-  String texto;
-  bool status;
-
-  Respuesta({
-    required this.color,
-    required this.texto,
-    required this.status,
-  });
 }
 
 Future<List<Sala>> fetchSalas(http.Client client) async {

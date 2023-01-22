@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/pages/sala_crud.dart';
+import 'package:sala_ensayo/pages/sala_grupo_crud.dart';
 import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -37,7 +38,10 @@ class AgendaPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SalaCRUD(sala: Sala()),
+              builder: (context) => SalaGrupoCRUD(
+                salagrupo: SalaGrupo(
+                    horaDesde: DateTime.now(), horaHasta: DateTime.now()),
+              ),
             ),
           );
         },
