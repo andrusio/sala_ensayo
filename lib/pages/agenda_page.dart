@@ -5,6 +5,7 @@ import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../models/sala.dart';
+import '../models/sala_grupo.dart';
 
 // https://pub.dev/packages/syncfusion_flutter_calendar/example
 
@@ -20,12 +21,12 @@ class AgendaPage extends StatelessWidget {
       ),
       drawer: const PanelLateralWidget(),
       body: Column(
-        children: const [
+        children: [
           Expanded(
             flex: 8,
-            child: Calendario(),
+            child: _turnos(),
           ),
-          Expanded(
+          const Expanded(
             flex: 2,
             child: Text("Aca va caja con referencia de colores/salas"),
           ),
@@ -47,23 +48,40 @@ class AgendaPage extends StatelessWidget {
   }
 }
 
-/// The hove page which hosts the calendar
+Widget _turnos() {
+  return FutureBuilder<List<SalaGrupo>>(
+      future: fetchSalaGrupo(http.Client()),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('No se puso conectar con el servidor'),
+          );
+        } else if (snapshot.hasData) {
+          return Calendario(salagrupo: snapshot.data!);
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      });
+}
+
 class Calendario extends StatefulWidget {
   /// Creates the home page to display teh calendar widget.
-  const Calendario({Key? key}) : super(key: key);
+  const Calendario({Key? key, required this.salagrupo}) : super(key: key);
+  final List<SalaGrupo> salagrupo;
 
   @override
   // ignore: library_private_types_in_public_api
-  _CalendarioState createState() => _CalendarioState();
+  CalendarioState createState() => CalendarioState();
 }
 
-class _CalendarioState extends State<Calendario> {
+class CalendarioState extends State<Calendario> {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
-      // view: CalendarView.month,
       view: CalendarView.timelineDay,
-      dataSource: MeetingDataSource(_getDataSource()),
+      dataSource: MeetingDataSource(widget.salagrupo),
       // by default the month appointment display mode set as Indicator, we can
       // change the display mode as appointment using the appointment display
       // mode property
@@ -71,84 +89,43 @@ class _CalendarioState extends State<Calendario> {
           appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
     );
   }
-
-  List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-    final DateTime endTime = startTime.add(const Duration(minutes: 90));
-    meetings.add(Meeting(
-        'La Renga', startTime, endTime, const Color(0xFF0F8644), false));
-    meetings.add(Meeting('Rata Blanca', startTime, endTime,
-        const Color.fromARGB(255, 235, 148, 17), false));
-    return meetings;
-  }
 }
 
 /// An object to set the appointment collection data source to calendar, which
 /// used to map the custom appointment data to the calendar appointment, and
 /// allows to add, remove or reset the appointment collection.
 class MeetingDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
-  MeetingDataSource(List<Meeting> source) {
+  MeetingDataSource(List<SalaGrupo> source) {
     appointments = source;
   }
 
   @override
   DateTime getStartTime(int index) {
-    return _getMeetingData(index).from;
+    return _getMeetingData(index).horaDesde;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return _getMeetingData(index).to;
+    return _getMeetingData(index).horaHasta;
   }
 
   @override
   String getSubject(int index) {
-    return _getMeetingData(index).eventName;
+    return _getMeetingData(index).grupo;
   }
 
   @override
   Color getColor(int index) {
-    return _getMeetingData(index).background;
+    return _getMeetingData(index).salaColor;
   }
 
-  @override
-  bool isAllDay(int index) {
-    return _getMeetingData(index).isAllDay;
-  }
-
-  Meeting _getMeetingData(int index) {
-    final dynamic meeting = appointments![index];
-    late final Meeting meetingData;
-    if (meeting is Meeting) {
-      meetingData = meeting;
+  SalaGrupo _getMeetingData(int index) {
+    final dynamic turno = appointments![index];
+    late final SalaGrupo turnosData;
+    if (turno is SalaGrupo) {
+      turnosData = turno;
     }
 
-    return meetingData;
+    return turnosData;
   }
-}
-
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
-class Meeting {
-  /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
 }
