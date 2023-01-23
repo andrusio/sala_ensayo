@@ -12,16 +12,20 @@ part 'sala_grupo.g.dart';
 class SalaGrupo {
   int? id;
   String? sala;
+  int? salaId;
   Color salaColor;
   String grupo;
+  int? grupoId;
   DateTime horaDesde;
   DateTime horaHasta;
 
   SalaGrupo(
       {this.id,
       this.sala,
+      this.salaId,
       this.salaColor = Colors.blueAccent,
       this.grupo = '',
+      this.grupoId,
       required this.horaDesde,
       required this.horaHasta});
 

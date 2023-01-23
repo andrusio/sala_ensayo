@@ -90,7 +90,7 @@ class _SalaListaState extends State<SalaLista> {
                     children: [
                       Expanded(
                         child: Image.network(
-                          'https://tech.pelmorex.com/wp-content/uploads/2020/10/flutter.png',
+                          'https://s3.us-west-2.amazonaws.com/static.ernieball.com/website/images/products/image_front/large/P09332.png',
                           fit: BoxFit.contain,
                         ),
                       ),

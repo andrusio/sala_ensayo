@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:sala_ensayo/models/grupo.dart';
+import 'package:sala_ensayo/models/persona.dart';
 import 'package:sala_ensayo/models/sala_grupo.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:sala_ensayo/pages/sala_grupo_agregar.dart';
 import '../models/clases_generales.dart';
+import '../models/sala.dart';
 
 class SalaGrupoCRUD extends StatefulWidget {
-  const SalaGrupoCRUD({Key? key, required this.salagrupo}) : super(key: key);
+  const SalaGrupoCRUD({Key? key, required this.salagrupo, required this.grupo})
+      : super(key: key);
   final SalaGrupo salagrupo;
+  final Grupo grupo;
 
   @override
   State<SalaGrupoCRUD> createState() => _SalaGrupoCRUDState();
@@ -13,6 +19,11 @@ class SalaGrupoCRUD extends StatefulWidget {
 
 class _SalaGrupoCRUDState extends State<SalaGrupoCRUD> {
   final _formKey = GlobalKey<FormState>();
+
+  void seleccionarSala(int salaId, String salaNombre) => setState(() {
+        widget.salagrupo.salaId = salaId;
+        widget.salagrupo.sala = salaNombre;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -24,103 +35,93 @@ class _SalaGrupoCRUDState extends State<SalaGrupoCRUD> {
       ),
       body: Column(
         children: [
-          selectorGrupo(context, widget.salagrupo),
-          selectorSala(context, widget.salagrupo),
+          _salaSelector()
+          // selectorSala(context, widget.salagrupo),
+          // selectorGrupo(context, widget.salagrupo),
         ],
+      ),
+    );
+  }
+
+  Widget _salaSelector() {
+    return FutureBuilder<List<Sala>>(
+      future: fetchSalas(http.Client()),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('No se puso conectar con el servidor'),
+          );
+        } else if (snapshot.hasData) {
+          return _salaLista(snapshot.data!);
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _salaLista(List<Sala> salas) {
+    return GridView.builder(
+      shrinkWrap: true,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      itemCount: salas.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            seleccionarSala(salas[index].id!, salas[index].nombre!);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SalaGrupoAgregarPage(
+                    salagrupo: widget.salagrupo, grupo: widget.grupo),
+              ),
+            );
+          },
+          child: Container(
+            height: 110,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: salas[index].color),
+            margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  salas[index].nombre!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1,
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 5,
       ),
     );
   }
 
   Widget selectorGrupo(BuildContext context, SalaGrupo salagrupo) {
     return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-      child: const Text('Seleccionar Grupo'),
-    );
-  }
-
-  Widget selectorSala(BuildContext context, SalaGrupo salagrupo) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-      child: const Text('Seleccionar Sala'),
-    );
-  }
-
-  Widget formulario(BuildContext context, SalaGrupo salagrupo) {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            botonera(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget botonera() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          if (widget.salagrupo.id != null) ...[
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            //   onPressed: () async {
-            //     if (_formKey.currentState!.validate()) {
-            //       Respuesta respuesta =
-            //           await eliminarSalaGrupo(widget.sala.id!);
-            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //         content: Text(respuesta.texto),
-            //         backgroundColor: respuesta.color,
-            //       ));
-            //       Navigator.pop(context);
-            //     }
-            //   },
-            //   child: const Text('Eliminar'),
-            // ),
-            const SizedBox(width: 25),
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     if (_formKey.currentState!.validate()) {
-            //       Respuesta respuesta = await modificarSalaGrupo(
-            //           widget.sala.id!,
-            //           nombreController.text,
-            //           precioController.text,
-            //           widget.sala.color!);
-            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //         content: Text(respuesta.texto),
-            //         backgroundColor: respuesta.color,
-            //       ));
-            //       Navigator.pop(context);
-            //     }
-            //   },
-            //   child: const Text('Editar'),
-            // ),
-          ],
-          if (widget.salagrupo.id == null) ...[
-            ElevatedButton(
-              onPressed: () async {
-                // if (_formKey.currentState!.validate()) {
-                //   Respuesta respuesta = await crearSala(nombreController.text,
-                //       precioController.text, widget.sala.color!);
-                //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                //     content: Text(respuesta.texto),
-                //     backgroundColor: respuesta.color,
-                //   ));
-                //   Navigator.pop(context);
-                // }
-              },
-              child: const Text('Guardar'),
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+        child: const Text('Seleccionar Grupo'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SalaGrupoAgregarPage(
+                  salagrupo: widget.salagrupo, grupo: widget.grupo),
             ),
-          ],
-        ],
-      ),
-    );
+          );
+        });
   }
 }

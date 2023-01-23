@@ -5,6 +5,7 @@ import 'package:sala_ensayo/pages/sala_grupo_crud.dart';
 import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../models/grupo.dart';
 import '../models/sala.dart';
 import '../models/sala_grupo.dart';
 
@@ -40,7 +41,10 @@ class AgendaPage extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => SalaGrupoCRUD(
                 salagrupo: SalaGrupo(
-                    horaDesde: DateTime.now(), horaHasta: DateTime.now()),
+                  horaDesde: DateTime.now(),
+                  horaHasta: DateTime.now(),
+                ),
+                grupo: Grupo(),
               ),
             ),
           );
@@ -85,12 +89,13 @@ class CalendarioState extends State<Calendario> {
   Widget build(BuildContext context) {
     return SfCalendar(
       view: CalendarView.timelineDay,
+
       dataSource: MeetingDataSource(widget.salagrupo),
       // by default the month appointment display mode set as Indicator, we can
       // change the display mode as appointment using the appointment display
       // mode property
-      monthViewSettings: const MonthViewSettings(
-          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+      // monthViewSettings: const MonthViewSettings(
+      // appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
     );
   }
 }
