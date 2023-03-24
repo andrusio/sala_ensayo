@@ -5,23 +5,24 @@ import 'package:sala_ensayo/models/grupo.dart';
 // import 'package:sala_ensayo/pages/persona_crud.dart';
 // import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 import 'package:sala_ensayo/models/clases_generales.dart';
+import 'package:sala_ensayo/pages/sala_grupo_horario.dart';
 
 import '../models/sala_grupo.dart';
 
 // Input buscador
 // https://karthikponnam.medium.com/flutter-search-in-listview-1ffa40956685
-class SalaGrupoAgregarPage extends StatefulWidget {
-  const SalaGrupoAgregarPage(
+class SalaGrupoGrupoPage extends StatefulWidget {
+  const SalaGrupoGrupoPage(
       {Key? key, required this.salagrupo, required this.grupo})
       : super(key: key);
   final SalaGrupo salagrupo;
   final Grupo grupo;
 
   @override
-  _SalaGrupoAgregarPageState createState() => _SalaGrupoAgregarPageState();
+  _SalaGrupoGrupoPageState createState() => _SalaGrupoGrupoPageState();
 }
 
-class _SalaGrupoAgregarPageState extends State<SalaGrupoAgregarPage> {
+class _SalaGrupoGrupoPageState extends State<SalaGrupoGrupoPage> {
   void seleccionarGrupo(int grupoId) => setState(() {
         widget.salagrupo.grupoId = grupoId;
       });
@@ -71,6 +72,29 @@ class SalaGrupoLista extends StatefulWidget {
 }
 
 class _SalaGrupoListaState extends State<SalaGrupoLista> {
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context, grupo) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+    widget.salaGrupo.horaDesde = selectedDate;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            SalaGrupoHorarioPage(salaGrupo: widget.salaGrupo, grupo: grupo),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -81,13 +105,14 @@ class _SalaGrupoListaState extends State<SalaGrupoLista> {
           leading: IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return HoraDesde(
-                          grupo: widget.grupos[index],
-                          salaGrupo: widget.salaGrupo);
-                    });
+                _selectDate(context, widget.grupos[index]);
+                // showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return SalaGrupoHorarioPage(
+                //           grupo: widget.grupos[index],
+                //           salaGrupo: widget.salaGrupo);
+                //     });
               }),
         );
       },

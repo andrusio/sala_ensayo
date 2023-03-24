@@ -3,21 +3,21 @@ import 'package:sala_ensayo/models/grupo.dart';
 import 'package:sala_ensayo/models/persona.dart';
 import 'package:sala_ensayo/models/sala_grupo.dart';
 import 'package:http/http.dart' as http;
-import 'package:sala_ensayo/pages/sala_grupo_agregar.dart';
+import 'package:sala_ensayo/pages/sala_grupo_grupo.dart';
 import '../models/clases_generales.dart';
 import '../models/sala.dart';
 
-class SalaGrupoCRUD extends StatefulWidget {
-  const SalaGrupoCRUD({Key? key, required this.salagrupo, required this.grupo})
+class SalaGrupoSala extends StatefulWidget {
+  const SalaGrupoSala({Key? key, required this.salagrupo, required this.grupo})
       : super(key: key);
   final SalaGrupo salagrupo;
   final Grupo grupo;
 
   @override
-  State<SalaGrupoCRUD> createState() => _SalaGrupoCRUDState();
+  State<SalaGrupoSala> createState() => _SalaGrupoSalaState();
 }
 
-class _SalaGrupoCRUDState extends State<SalaGrupoCRUD> {
+class _SalaGrupoSalaState extends State<SalaGrupoSala> {
   final _formKey = GlobalKey<FormState>();
 
   void seleccionarSala(int salaId, String salaNombre) => setState(() {
@@ -74,7 +74,7 @@ class _SalaGrupoCRUDState extends State<SalaGrupoCRUD> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SalaGrupoAgregarPage(
+                builder: (context) => SalaGrupoGrupoPage(
                     salagrupo: widget.salagrupo, grupo: widget.grupo),
               ),
             );
@@ -118,7 +118,7 @@ class _SalaGrupoCRUDState extends State<SalaGrupoCRUD> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SalaGrupoAgregarPage(
+              builder: (context) => SalaGrupoGrupoPage(
                   salagrupo: widget.salagrupo, grupo: widget.grupo),
             ),
           );
