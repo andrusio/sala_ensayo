@@ -40,9 +40,9 @@ class AgendaPage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SalaGrupoSala(
-                salagrupo: SalaGrupo(
-                  horaDesde: DateTime.now(),
-                  horaHasta: DateTime.now(),
+                salaGrupo: SalaGrupo(
+                  horaDesde: DateTime.parse('2023-01-01 00:00:00'),
+                  horaHasta: DateTime.parse('2023-01-01 00:00:00'),
                 ),
                 grupo: Grupo(),
               ),

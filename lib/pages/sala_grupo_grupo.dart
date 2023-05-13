@@ -5,7 +5,7 @@ import 'package:sala_ensayo/models/grupo.dart';
 // import 'package:sala_ensayo/pages/persona_crud.dart';
 // import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 import 'package:sala_ensayo/models/clases_generales.dart';
-import 'package:sala_ensayo/pages/sala_grupo_horario.dart';
+import 'package:sala_ensayo/pages/sala_grupo_resumen.dart';
 
 import '../models/sala_grupo.dart';
 
@@ -13,9 +13,9 @@ import '../models/sala_grupo.dart';
 // https://karthikponnam.medium.com/flutter-search-in-listview-1ffa40956685
 class SalaGrupoGrupoPage extends StatefulWidget {
   const SalaGrupoGrupoPage(
-      {Key? key, required this.salagrupo, required this.grupo})
+      {Key? key, required this.salaGrupo, required this.grupo})
       : super(key: key);
-  final SalaGrupo salagrupo;
+  final SalaGrupo salaGrupo;
   final Grupo grupo;
 
   @override
@@ -23,16 +23,13 @@ class SalaGrupoGrupoPage extends StatefulWidget {
 }
 
 class _SalaGrupoGrupoPageState extends State<SalaGrupoGrupoPage> {
-  void seleccionarGrupo(int grupoId) => setState(() {
-        widget.salagrupo.grupoId = grupoId;
-      });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agregar turno'),
       ),
-      body: _grupoSelector(widget.salagrupo),
+      body: _grupoSelector(widget.salaGrupo),
     );
   }
 
@@ -74,7 +71,12 @@ class SalaGrupoLista extends StatefulWidget {
 class _SalaGrupoListaState extends State<SalaGrupoLista> {
   DateTime selectedDate = DateTime.now();
 
-  Future<void> _selectDate(BuildContext context, grupo) async {
+  void seleccionarGrupo(Grupo grupo) => setState(() {
+        widget.salaGrupo.grupoId = grupo.id;
+        widget.salaGrupo.grupo = grupo.nombre!;
+      });
+
+  Future<void> _selectDate(BuildContext context, Grupo grupo) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
@@ -86,11 +88,12 @@ class _SalaGrupoListaState extends State<SalaGrupoLista> {
       });
     }
     widget.salaGrupo.horaDesde = selectedDate;
+    widget.salaGrupo.horaHasta = selectedDate;
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
-            SalaGrupoHorarioPage(salaGrupo: widget.salaGrupo, grupo: grupo),
+            SalaGrupoResumenPage(salaGrupo: widget.salaGrupo, grupo: grupo),
       ),
     );
   }
@@ -105,42 +108,22 @@ class _SalaGrupoListaState extends State<SalaGrupoLista> {
           leading: IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                _selectDate(context, widget.grupos[index]);
-                // showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) {
-                //       return SalaGrupoHorarioPage(
-                //           grupo: widget.grupos[index],
-                //           salaGrupo: widget.salaGrupo);
-                //     });
+                seleccionarGrupo(widget.grupos[index]);
+                if (widget.salaGrupo.horaDesde == widget.salaGrupo.horaHasta) {
+                  _selectDate(context, widget.grupos[index]);
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SalaGrupoResumenPage(
+                          salaGrupo: widget.salaGrupo,
+                          grupo: widget.grupos[index]),
+                    ),
+                  );
+                }
               }),
         );
       },
-    );
-  }
-}
-
-class HoraDesde extends StatelessWidget {
-  const HoraDesde({Key? key, required this.grupo, required this.salaGrupo})
-      : super(key: key);
-
-  final Grupo grupo;
-  final SalaGrupo salaGrupo;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Sala ' + salaGrupo.sala! + ' - ' + grupo.nombre!),
-      content: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: [
-              const Text('widget horario inicio'),
-              const Text('widget horario fin'),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

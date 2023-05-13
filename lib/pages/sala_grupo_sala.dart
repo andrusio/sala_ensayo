@@ -4,13 +4,14 @@ import 'package:sala_ensayo/models/persona.dart';
 import 'package:sala_ensayo/models/sala_grupo.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/pages/sala_grupo_grupo.dart';
+import 'package:sala_ensayo/pages/sala_grupo_resumen.dart';
 import '../models/clases_generales.dart';
 import '../models/sala.dart';
 
 class SalaGrupoSala extends StatefulWidget {
-  const SalaGrupoSala({Key? key, required this.salagrupo, required this.grupo})
+  const SalaGrupoSala({Key? key, required this.salaGrupo, required this.grupo})
       : super(key: key);
-  final SalaGrupo salagrupo;
+  final SalaGrupo salaGrupo;
   final Grupo grupo;
 
   @override
@@ -20,25 +21,21 @@ class SalaGrupoSala extends StatefulWidget {
 class _SalaGrupoSalaState extends State<SalaGrupoSala> {
   final _formKey = GlobalKey<FormState>();
 
-  void seleccionarSala(int salaId, String salaNombre) => setState(() {
-        widget.salagrupo.salaId = salaId;
-        widget.salagrupo.sala = salaNombre;
+  void seleccionarSala(Sala sala) => setState(() {
+        widget.salaGrupo.salaId = sala.id;
+        widget.salaGrupo.sala = sala.nombre;
+        widget.salaGrupo.salaColor = sala.color!;
       });
-
   @override
   Widget build(BuildContext context) {
     String titulo =
-        widget.salagrupo.id == null ? 'Agregar turno' : 'Editar turno';
+        widget.salaGrupo.id == null ? 'Agregar turno' : 'Editar turno';
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),
       ),
       body: Column(
-        children: [
-          _salaSelector()
-          // selectorSala(context, widget.salagrupo),
-          // selectorGrupo(context, widget.salagrupo),
-        ],
+        children: [_salaSelector()],
       ),
     );
   }
@@ -70,14 +67,24 @@ class _SalaGrupoSalaState extends State<SalaGrupoSala> {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            seleccionarSala(salas[index].id!, salas[index].nombre!);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SalaGrupoGrupoPage(
-                    salagrupo: widget.salagrupo, grupo: widget.grupo),
-              ),
-            );
+            seleccionarSala(salas[index]);
+            if (widget.grupo.id == null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SalaGrupoGrupoPage(
+                      salaGrupo: widget.salaGrupo, grupo: widget.grupo),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SalaGrupoResumenPage(
+                      salaGrupo: widget.salaGrupo, grupo: widget.grupo),
+                ),
+              );
+            }
           },
           child: Container(
             height: 110,
@@ -108,20 +115,5 @@ class _SalaGrupoSalaState extends State<SalaGrupoSala> {
         mainAxisSpacing: 5,
       ),
     );
-  }
-
-  Widget selectorGrupo(BuildContext context, SalaGrupo salagrupo) {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-        child: const Text('Seleccionar Grupo'),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SalaGrupoGrupoPage(
-                  salagrupo: widget.salagrupo, grupo: widget.grupo),
-            ),
-          );
-        });
   }
 }
