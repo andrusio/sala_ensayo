@@ -105,6 +105,11 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
                 ),
               ],
             ),
+            Row(
+              children: [
+                botonera(),
+              ],
+            )
           ],
         ),
       ),
@@ -141,5 +146,65 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
         // widget.salaGrupo.horaDesde = "${time.hour}:${time.minute}";
       });
     }
+  }
+
+  Widget botonera() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (widget.salaGrupo.id != null) ...[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () async {
+                Respuesta respuesta =
+                    await eliminarSalaGrupo(widget.salaGrupo.id!);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(respuesta.texto),
+                  backgroundColor: respuesta.color,
+                ));
+                Navigator.pop(context);
+              },
+              child: const Text('Eliminar'),
+            ),
+            const SizedBox(width: 25),
+            ElevatedButton(
+              onPressed: () async {
+                Respuesta respuesta = await modificarSalaGrupo(
+                    widget.salaGrupo.id!,
+                    widget.salaGrupo.salaId!,
+                    widget.salaGrupo.grupoId!,
+                    widget.salaGrupo.horaDesde,
+                    widget.salaGrupo.horaHasta);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(respuesta.texto),
+                  backgroundColor: respuesta.color,
+                ));
+                Navigator.pop(context);
+              },
+              child: const Text('Editar'),
+            ),
+          ],
+          if (widget.salaGrupo.id == null) ...[
+            ElevatedButton(
+              onPressed: () async {
+                Respuesta respuesta = await crearSalaGrupo(
+                    widget.salaGrupo.salaId!,
+                    widget.salaGrupo.grupoId!,
+                    widget.salaGrupo.horaDesde,
+                    widget.salaGrupo.horaHasta);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(respuesta.texto),
+                  backgroundColor: respuesta.color,
+                ));
+                Navigator.pop(context);
+              },
+              child: const Text('Guardar'),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }
