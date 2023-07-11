@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:sala_ensayo/models/persona.dart';
 import 'package:sala_ensayo/models/grupo.dart';
-// import 'package:sala_ensayo/pages/persona_crud.dart';
-// import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
-import 'package:sala_ensayo/models/clases_generales.dart';
 import 'package:sala_ensayo/pages/sala_grupo_resumen.dart';
 
 import '../models/sala_grupo.dart';
@@ -12,11 +8,9 @@ import '../models/sala_grupo.dart';
 // Input buscador
 // https://karthikponnam.medium.com/flutter-search-in-listview-1ffa40956685
 class SalaGrupoGrupoPage extends StatefulWidget {
-  const SalaGrupoGrupoPage(
-      {Key? key, required this.salaGrupo, required this.grupo})
+  const SalaGrupoGrupoPage({Key? key, required this.salaGrupo})
       : super(key: key);
   final SalaGrupo salaGrupo;
-  final Grupo grupo;
 
   @override
   _SalaGrupoGrupoPageState createState() => _SalaGrupoGrupoPageState();
@@ -92,8 +86,7 @@ class _SalaGrupoListaState extends State<SalaGrupoLista> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            SalaGrupoResumenPage(salaGrupo: widget.salaGrupo, grupo: grupo),
+        builder: (context) => SalaGrupoResumenPage(salaGrupo: widget.salaGrupo),
       ),
     );
   }
@@ -112,12 +105,12 @@ class _SalaGrupoListaState extends State<SalaGrupoLista> {
                 if (widget.salaGrupo.horaDesde == widget.salaGrupo.horaHasta) {
                   _selectDate(context, widget.grupos[index]);
                 } else {
+                  widget.salaGrupo.grupoId = widget.grupos[index].id;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SalaGrupoResumenPage(
-                          salaGrupo: widget.salaGrupo,
-                          grupo: widget.grupos[index]),
+                      builder: (context) =>
+                          SalaGrupoResumenPage(salaGrupo: widget.salaGrupo),
                     ),
                   );
                 }

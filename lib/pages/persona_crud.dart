@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/models/persona.dart';
 import 'package:sala_ensayo/models/clases_generales.dart';
-import 'dart:developer';
 
 class PersonaCRUD extends StatefulWidget {
   const PersonaCRUD({Key? key, required Persona this.persona})

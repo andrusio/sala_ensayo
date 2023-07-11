@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:sala_ensayo/pages/sala_crud.dart';
+import 'package:sala_ensayo/pages/sala_grupo_resumen.dart';
 import 'package:sala_ensayo/pages/sala_grupo_sala.dart';
 import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../models/grupo.dart';
-import '../models/sala.dart';
 import '../models/sala_grupo.dart';
 
 // https://pub.dev/packages/syncfusion_flutter_calendar/example
@@ -44,7 +42,6 @@ class AgendaPage extends StatelessWidget {
                   horaDesde: DateTime.parse('2023-01-01 00:00:00'),
                   horaHasta: DateTime.parse('2023-01-01 00:00:00'),
                 ),
-                grupo: Grupo(),
               ),
             ),
           );
@@ -89,7 +86,7 @@ class CalendarioState extends State<Calendario> {
   Widget build(BuildContext context) {
     return SfCalendar(
       view: CalendarView.timelineDay,
-
+      onTap: editarSalaGrupo,
       dataSource: MeetingDataSource(widget.salagrupo),
       // by default the month appointment display mode set as Indicator, we can
       // change the display mode as appointment using the appointment display
@@ -97,6 +94,18 @@ class CalendarioState extends State<Calendario> {
       // monthViewSettings: const MonthViewSettings(
       // appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
     );
+  }
+
+  editarSalaGrupo(CalendarTapDetails details) {
+    if (details.appointments != null) {
+      SalaGrupo salaGrupo = (details.appointments![0]);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SalaGrupoResumenPage(salaGrupo: salaGrupo),
+        ),
+      );
+    }
   }
 }
 

@@ -31,20 +31,14 @@ class PanelLateralWidget extends StatelessWidget {
             leading: const Icon(Icons.calendar_today),
             title: const Text('Agenda'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AgendaPage()),
-              );
+              Navigator.pushNamed(context, '/agenda');
             },
           ),
           ListTile(
             leading: const Icon(Icons.my_library_music),
             title: const Text('Salas'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SalasPage()),
-              );
+              Navigator.pushNamed(context, '/salas');
             },
           ),
           const ListTile(
@@ -55,20 +49,14 @@ class PanelLateralWidget extends StatelessWidget {
             leading: const Icon(Icons.people),
             title: const Text('Grupos'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GruposPage()),
-              );
+              Navigator.pushNamed(context, '/grupos');
             },
           ),
           ListTile(
             leading: const Icon(Icons.account_circle),
             title: const Text('Personas'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PersonasPage()),
-              );
+              Navigator.pushNamed(context, '/personas');
             },
           ),
           const ListTile(

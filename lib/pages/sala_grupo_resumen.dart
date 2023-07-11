@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:sala_ensayo/models/persona.dart';
-import 'package:sala_ensayo/models/grupo.dart';
 import 'package:sala_ensayo/models/clases_generales.dart';
 import 'package:sala_ensayo/pages/sala_grupo_grupo.dart';
 import 'package:sala_ensayo/pages/sala_grupo_sala.dart';
@@ -11,11 +8,9 @@ import '../models/sala_grupo.dart';
 // Input buscador
 // https://karthikponnam.medium.com/flutter-search-in-listview-1ffa40956685
 class SalaGrupoResumenPage extends StatefulWidget {
-  const SalaGrupoResumenPage(
-      {Key? key, required this.salaGrupo, required this.grupo})
+  const SalaGrupoResumenPage({Key? key, required this.salaGrupo})
       : super(key: key);
   final SalaGrupo salaGrupo;
-  final Grupo grupo;
 
   @override
   _SalaGrupoResumenPageState createState() => _SalaGrupoResumenPageState();
@@ -24,9 +19,11 @@ class SalaGrupoResumenPage extends StatefulWidget {
 class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
   @override
   Widget build(BuildContext context) {
+    String titulo =
+        widget.salaGrupo.id == null ? 'Agregar turno' : 'Editar turno';
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar turno'),
+        title: Text(titulo),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -79,8 +76,8 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SalaGrupoSala(
-                            salaGrupo: widget.salaGrupo, grupo: widget.grupo),
+                        builder: (context) =>
+                            SalaGrupoSala(salaGrupo: widget.salaGrupo),
                       ),
                     ),
                   },
@@ -97,8 +94,8 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SalaGrupoGrupoPage(
-                            salaGrupo: widget.salaGrupo, grupo: widget.grupo),
+                        builder: (context) =>
+                            SalaGrupoGrupoPage(salaGrupo: widget.salaGrupo),
                       ),
                     ),
                   },

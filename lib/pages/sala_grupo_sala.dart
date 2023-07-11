@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:sala_ensayo/models/grupo.dart';
-import 'package:sala_ensayo/models/persona.dart';
 import 'package:sala_ensayo/models/sala_grupo.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/pages/sala_grupo_grupo.dart';
 import 'package:sala_ensayo/pages/sala_grupo_resumen.dart';
-import '../models/clases_generales.dart';
 import '../models/sala.dart';
 
 class SalaGrupoSala extends StatefulWidget {
-  const SalaGrupoSala({Key? key, required this.salaGrupo, required this.grupo})
-      : super(key: key);
+  const SalaGrupoSala({Key? key, required this.salaGrupo}) : super(key: key);
   final SalaGrupo salaGrupo;
-  final Grupo grupo;
 
   @override
   State<SalaGrupoSala> createState() => _SalaGrupoSalaState();
 }
 
 class _SalaGrupoSalaState extends State<SalaGrupoSala> {
-  final _formKey = GlobalKey<FormState>();
-
   void seleccionarSala(Sala sala) => setState(() {
         widget.salaGrupo.salaId = sala.id;
         widget.salaGrupo.sala = sala.nombre;
@@ -68,20 +62,20 @@ class _SalaGrupoSalaState extends State<SalaGrupoSala> {
         return GestureDetector(
           onTap: () {
             seleccionarSala(salas[index]);
-            if (widget.grupo.id == null) {
+            if (widget.salaGrupo.grupoId == null) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SalaGrupoGrupoPage(
-                      salaGrupo: widget.salaGrupo, grupo: widget.grupo),
+                  builder: (context) =>
+                      SalaGrupoGrupoPage(salaGrupo: widget.salaGrupo),
                 ),
               );
             } else {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SalaGrupoResumenPage(
-                      salaGrupo: widget.salaGrupo, grupo: widget.grupo),
+                  builder: (context) =>
+                      SalaGrupoResumenPage(salaGrupo: widget.salaGrupo),
                 ),
               );
             }
