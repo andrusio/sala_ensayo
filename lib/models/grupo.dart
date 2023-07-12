@@ -62,39 +62,40 @@ crearGrupo(String nombre) async {
 
 eliminarGrupo(int id) async {
   final response = await http.delete(
-    Uri.parse(Env.baseUrl + '/grupo/$id/'),
+    Uri.parse(Env.baseUrl + '/grupo/$id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
 
-  if (response.statusCode == 204) {
+  if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
-        color: Colors.green, texto: 'Sala eliminada con éxito', status: true);
+        color: Colors.green, texto: 'Grupo eliminado con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al eliminar Sala', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }
 
 modificarGrupo(int id, String nombre) async {
-  final response = await http.put(Uri.parse(Env.baseUrl + '/grupo/$id/'),
+  final response = await http.put(Uri.parse(Env.baseUrl + '/grupo'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
+        'id': id,
         'nombre': nombre,
       }));
 
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
-        color: Colors.green, texto: 'Grupo modificada con éxito', status: true);
+        color: Colors.green, texto: 'Grupo modificado con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al editar Grupo', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }
@@ -114,8 +115,8 @@ agregarIntegrante(int idGrupo, int idPersona) async {
         status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al agregar integrante', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }

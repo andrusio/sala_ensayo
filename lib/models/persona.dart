@@ -63,40 +63,41 @@ crearPersona(String nombre, String apellido, String telefono) async {
         color: Colors.green, texto: 'Persona creada con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al crear persona', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }
 
 eliminarPersona(int id) async {
   final response = await http.delete(
-    Uri.parse(Env.baseUrl + '/persona/$id/'),
+    Uri.parse(Env.baseUrl + '/persona/$id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
 
-  if (response.statusCode == 204) {
+  if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green,
         texto: 'Persona eliminada con éxito',
         status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al eliminar persona', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }
 
 modificarPersona(
     int id, String nombre, String apellido, String telefono) async {
-  final response = await http.put(Uri.parse(Env.baseUrl + '/persona/$id/'),
+  final response = await http.put(Uri.parse(Env.baseUrl + '/persona'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
+        'id': id,
         'nombre': nombre,
         'apellido': apellido,
         'telefono': telefono,
@@ -109,8 +110,8 @@ modificarPersona(
         status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al editar persona', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }

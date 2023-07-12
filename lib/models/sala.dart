@@ -41,49 +41,49 @@ crearSala(String nombre, String precio, Color color) async {
         color: Colors.green, texto: 'Sala creada con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al crear Sala', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }
 
 eliminarSala(int id) async {
   final response = await http.delete(
-    Uri.parse(Env.baseUrl + '/sala/$id/'),
+    Uri.parse(Env.baseUrl + '/sala/$id'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
 
-  if (response.statusCode == 204) {
+  if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Sala eliminada con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al eliminar Sala', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }
 
 modificarSala(int id, String nombre, String precio, Color color) async {
-  final response = await http.put(Uri.parse(Env.baseUrl + '/sala/$id/'),
+  final response = await http.put(Uri.parse(Env.baseUrl + '/sala'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
+        'id': id,
         'nombre': nombre,
-        'precio': precio,
+        'precio': double.parse(precio),
         'color': color.value
       }));
-
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Sala modificada con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al editar Sala', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: response.body, status: false);
     return respuesta;
   }
 }
