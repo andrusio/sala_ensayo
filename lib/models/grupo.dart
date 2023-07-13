@@ -49,13 +49,14 @@ crearGrupo(String nombre) async {
         'nombre': nombre,
       }));
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 201) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Grupo creado con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al crear Grupo', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -67,14 +68,14 @@ eliminarGrupo(int id) async {
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
-
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Grupo eliminado con éxito', status: true);
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -89,13 +90,14 @@ modificarGrupo(int id, String nombre) async {
         'nombre': nombre,
       }));
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Grupo modificado con éxito', status: true);
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -108,6 +110,7 @@ agregarIntegrante(int idGrupo, int idPersona) async {
     },
   );
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 201) {
     Respuesta respuesta = Respuesta(
         color: Colors.green,
@@ -116,7 +119,7 @@ agregarIntegrante(int idGrupo, int idPersona) async {
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }

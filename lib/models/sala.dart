@@ -36,13 +36,14 @@ crearSala(String nombre, String precio, Color color) async {
         'color': color.value
       }));
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 201) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Sala creada con éxito', status: true);
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -54,14 +55,14 @@ eliminarSala(int id) async {
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
-
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Sala eliminada con éxito', status: true);
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -77,13 +78,14 @@ modificarSala(int id, String nombre, String precio, Color color) async {
         'precio': double.parse(precio),
         'color': color.value
       }));
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Sala modificada con éxito', status: true);
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }

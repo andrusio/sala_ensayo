@@ -54,13 +54,14 @@ crearSalaGrupo(
         'hora_hasta': DateFormat('yyyy-MM-dd HH:mm').format(horaHasta)
       }));
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 201) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Turno creado con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al crear turno', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -73,13 +74,14 @@ eliminarSalaGrupo(int id) async {
     },
   );
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 204) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'turno eliminada con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al eliminar turno', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -97,13 +99,14 @@ modificarSalaGrupo(int id, int salaId, int grupoId, DateTime horaDesde,
         'hora_hasta': DateFormat('yyyy-MM-dd HH:mm').format(horaHasta)
       }));
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Turno modificada con éxito', status: true);
     return respuesta;
   } else {
-    Respuesta respuesta = Respuesta(
-        color: Colors.red, texto: 'Error al editar turno', status: false);
+    Respuesta respuesta =
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }

@@ -58,13 +58,14 @@ crearPersona(String nombre, String apellido, String telefono) async {
         'telefono': telefono,
       }));
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 201) {
     Respuesta respuesta = Respuesta(
         color: Colors.green, texto: 'Persona creada con éxito', status: true);
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -77,6 +78,7 @@ eliminarPersona(int id) async {
     },
   );
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green,
@@ -85,7 +87,7 @@ eliminarPersona(int id) async {
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
@@ -103,6 +105,7 @@ modificarPersona(
         'telefono': telefono,
       }));
 
+  final jsonBody = jsonDecode(response.body);
   if (response.statusCode == 200) {
     Respuesta respuesta = Respuesta(
         color: Colors.green,
@@ -111,7 +114,7 @@ modificarPersona(
     return respuesta;
   } else {
     Respuesta respuesta =
-        Respuesta(color: Colors.red, texto: response.body, status: false);
+        Respuesta(color: Colors.red, texto: jsonBody['error'], status: false);
     return respuesta;
   }
 }
