@@ -5,9 +5,14 @@ import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 
 import '../models/sala.dart';
 
-class SalasPage extends StatelessWidget {
+class SalasPage extends StatefulWidget {
   const SalasPage({Key? key}) : super(key: key);
 
+  @override
+  _SalasPageState createState() => _SalasPageState();
+}
+
+class _SalasPageState extends State<SalasPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +29,7 @@ class SalasPage extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => SalaCRUD(sala: Sala()),
             ),
-          );
+          ).then((value) => setState((() {})));
         },
         tooltip: 'Agregar',
         child: const Icon(Icons.add),
@@ -83,7 +88,7 @@ class _SalaListaState extends State<SalaLista> {
                       MaterialPageRoute(
                           builder: (context) =>
                               SalaCRUD(sala: widget.salas[index])),
-                    );
+                    ).then((value) => setState((() {})));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

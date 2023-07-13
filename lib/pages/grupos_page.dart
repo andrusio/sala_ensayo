@@ -5,9 +5,14 @@ import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 
 import '../models/grupo.dart';
 
-class GruposPage extends StatelessWidget {
+class GruposPage extends StatefulWidget {
   const GruposPage({Key? key}) : super(key: key);
 
+  @override
+  _GruposPageState createState() => _GruposPageState();
+}
+
+class _GruposPageState extends State<GruposPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +29,7 @@ class GruposPage extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => GrupoCRUD(grupo: Grupo()),
             ),
-          );
+          ).then((value) => setState((() {})));
         },
         tooltip: 'Agregar',
         child: const Icon(Icons.add),
