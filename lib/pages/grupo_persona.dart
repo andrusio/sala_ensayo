@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/models/persona.dart';
 import 'package:sala_ensayo/models/grupo.dart';
 import 'package:sala_ensayo/pages/persona_crud.dart';
-import 'package:sala_ensayo/widgets/panel_lateral_widget.dart';
 import 'package:sala_ensayo/models/clases_generales.dart';
 
 class GrupoPersonaPage extends StatefulWidget {

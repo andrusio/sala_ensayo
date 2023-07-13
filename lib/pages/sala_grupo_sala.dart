@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sala_ensayo/models/grupo.dart';
 import 'package:sala_ensayo/models/sala_grupo.dart';
 import 'package:http/http.dart' as http;
 import 'package:sala_ensayo/pages/sala_grupo_grupo.dart';

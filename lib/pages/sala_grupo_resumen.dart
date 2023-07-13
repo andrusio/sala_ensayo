@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sala_ensayo/models/clases_generales.dart';
 import 'package:sala_ensayo/pages/sala_grupo_grupo.dart';
 import 'package:sala_ensayo/pages/sala_grupo_sala.dart';
@@ -35,7 +36,7 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
                 const Text('Fecha: '),
                 ElevatedButton(
                   child: Text(
-                      "${widget.salaGrupo.horaDesde.toLocal()}".split(' ')[0]),
+                      DateFormat('d/MM/y').format(widget.salaGrupo.horaDesde)),
                   onPressed: () => {},
                 ),
               ],
@@ -44,7 +45,11 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
               children: [
                 const Text('Desde: '),
                 ElevatedButton(
-                  child: Text("${widget.salaGrupo.horaDesde.toLocal()}"),
+                  child: Text(
+                    // "${widget.salaGrupo.horaDesde.toLocal()}"
+                    DateFormat('d/MM/y HH:mm')
+                        .format(widget.salaGrupo.horaDesde),
+                  ),
                   onPressed: () => {
                     displayTimePickerDesde(context,
                         TimeOfDay.fromDateTime(widget.salaGrupo.horaDesde))
@@ -58,7 +63,10 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
               children: [
                 const Text('Hasta: '),
                 ElevatedButton(
-                  child: Text("${widget.salaGrupo.horaHasta.toLocal()}"),
+                  child: Text(
+                    DateFormat('d/MM/y HH:mm')
+                        .format(widget.salaGrupo.horaHasta),
+                  ),
                   onPressed: () => {
                     displayTimePickerHasta(context,
                         TimeOfDay.fromDateTime(widget.salaGrupo.horaHasta))
@@ -103,6 +111,7 @@ class _SalaGrupoResumenPageState extends State<SalaGrupoResumenPage> {
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 botonera(),
               ],
